@@ -1,8 +1,7 @@
-import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
+import { Box,Grid, Stack, Typography } from "@mui/material";
 import React from "react";
 import backgroundImg from "../../assets/row-bg-two.jpg";
 import { theme } from "../../theme";
-import { StyledButton } from "../../styled/Button";
 import aboutImg from '../../assets/aboutSection.png'
 import workerImg from '../../assets/worker.png'
  import serviceImg from '../../assets/service.png'

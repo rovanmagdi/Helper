@@ -1,23 +1,29 @@
+import Navbar from "./components/Navbar";
 
-import Navbar from './components/Landing/Navbar'
+import { ThemeProvider } from "@emotion/react";
+import { theme } from "./theme";
 
-
-import { ThemeProvider } from '@emotion/react'
-import { theme } from './theme'
-
-import Landing from './pages/landing'
-
+import Landing from "./pages/landing";
+import Footer from "./components/Footer";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import About from "./pages/About";
 
 function App() {
-  
-
   return (
-   <ThemeProvider theme={theme}>
-   <Navbar/>
-   <Landing/>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+      <Navbar />
 
-   </ThemeProvider>
-  )
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/Home" element={<Landing />} />
+          <Route path="/About_US" element={<About />} />
+        </Routes>
+
+      <Footer />
+      </BrowserRouter>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
