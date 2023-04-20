@@ -15,7 +15,7 @@ const Landing = () => {
         <StyledTypographyTitle variant="h5" sx={{m:5}}>
           Choose Service Now{" "}
         </StyledTypographyTitle>
-        {/* <Carousal /> */}
+        <Carousal />
       </Box>
       <AboutLanding/>
       <BlogLanding/>
