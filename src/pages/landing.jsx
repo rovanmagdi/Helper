@@ -20,7 +20,7 @@ const Landing = () => {
       <AboutLanding/>
       <BlogLanding/>
       <Contact/>
-    <Footer/>
+  
     </>
   );
 };
