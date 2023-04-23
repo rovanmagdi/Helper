@@ -1,5 +1,5 @@
 import React from 'react'
-import ImgMediaCard from './Card'
+import {ImgMediaCard} from '../Card'
 import { Container, Grid } from '@mui/material'
 import { StyledTypographyTitle } from "../../styled/Typography";
 
