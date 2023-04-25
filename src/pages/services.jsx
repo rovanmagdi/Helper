@@ -70,54 +70,56 @@ function Services() {
         direction="row"
         sx={{ justifyContent: "space-between", mt: 3, mb: 3 }}
       >
-       
+
+        <Box
+          sx={{
+            border: "1px solid lightgray",
+            width: "30%",
+            position: "sticky",
+            zIndex: 2,
+            maxHeight: "calc(100vh - 172px)"
+
+          }}
+        >
           <Box
             sx={{
-              border: "1px solid lightgray",
-              width: "30%",
-
-              borderRadius: "5px"
+              backgroundColor: "rgba(230,230,230,0.8)",
+              p: 1,
+              px: 2,
+              mb: 1,
             }}
           >
-            <Box
-              sx={{
-                backgroundColor: "rgba(230,230,230,0.8)",
-                p: 1,
-                px: 2,
-                mb: 1,
-              }}
-            >
-              <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
-                Filter
-              </Typography>
-            </Box>
-
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Checkbox
-                type="checkbox"
-                name="languages"
-                value="All"
-                id="flexCheckDefault"
-                onChange={handleChange}
-              />
-              <Typography>All</Typography>
-            </Box>
-            {languagesList.map((lang, id) => {
-              return (
-                <Box key={id} sx={{ display: "flex", alignItems: "center" }}>
-                  <Checkbox
-                    type="checkbox"
-                    name="languages"
-                    value={lang}
-                    id="flexCheckDefault"
-                    onChange={handleChange}
-                  />
-                  <Typography>{lang}</Typography>
-                </Box>
-              );
-            })}
+            <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+              Filter
+            </Typography>
           </Box>
-    
+
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Checkbox
+              type="checkbox"
+              name="languages"
+              value="All"
+              id="flexCheckDefault"
+              onChange={handleChange}
+            />
+            <Typography>All</Typography>
+          </Box>
+          {languagesList.map((lang, id) => {
+            return (
+              <Box key={id} sx={{ display: "flex", alignItems: "center" }}>
+                <Checkbox
+                  type="checkbox"
+                  name="languages"
+                  value={lang}
+                  id="flexCheckDefault"
+                  onChange={handleChange}
+                />
+                <Typography>{lang}</Typography>
+              </Box>
+            );
+          })}
+        </Box>
+
         <Grid container spacing={2} sx={{ px: 2 }}>
           {userinfo.response.map((res, id) => {
             return (
