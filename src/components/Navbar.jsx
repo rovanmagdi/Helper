@@ -12,7 +12,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { StyledButton } from "../styled/Button";
 import { useNavigate } from "react-router";
 
-const pages = ["Home", "About_US", "Services", "Blogs", "Contact Us"];
+const pages = ["Home", "About_US", "Services", "Blogs", "Contact_Us"];
 
 function Navbar() {
   const [nav, setNav] = React.useState(true);
