@@ -25,6 +25,12 @@ function Navbar() {
     setActive(link)
   }
 
+  const handleLogin=()=>
+  {
+    nagivate("/Log_in")
+    console.log("done");
+  }
+
   return (
     <Box
       position="fixed"
@@ -79,6 +85,7 @@ function Navbar() {
             </Box>
 
             <Button
+            onClick={handleLogin}
               sx={{
                 display: { xs: "none", md: "flex" },
                 backgroundColor: `${theme.palette.primary.main}`,
@@ -146,7 +153,7 @@ function Navbar() {
               </Typography>
             ))}
 
-            <StyledButton>Login</StyledButton>
+            <StyledButton onClick={handleLogin}>Login</StyledButton>
           </Box>
         )}
       </Container>

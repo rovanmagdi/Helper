@@ -1,9 +1,7 @@
-import { React, useEffect } from "react";
+import { React } from "react";
 import { Stack, Box, TextField } from "@mui/material";
 // import WebFont from 'webfontloader';
-
 import { theme } from "../../theme/index";
-import { Button } from "@mui/material";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { StyledTypographyTitle } from "../../styled/Typography";
 import { StyledButton } from "../../styled/Button";

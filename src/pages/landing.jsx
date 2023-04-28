@@ -5,7 +5,6 @@ import Carousal from "../components/Landing/Carousel";
 import { StyledTypographyTitle } from "../styled/Typography";
 import AboutLanding from "../components/Landing/About";
 import BlogLanding from "../components/Landing/Blog";
-import Footer from "../components/Footer";
 import Contact from "../components/Landing/Contact";
 const Landing = () => {
   return (

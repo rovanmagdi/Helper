@@ -9,4 +9,5 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   "&:hover": {
     backgroundColor: "#117951",
   },
+  // width:"auto"
 }));
