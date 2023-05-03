@@ -72,8 +72,8 @@ export const Contact = () => {
                 frameborder="0"
                 allowfullscreen=""
             ></iframe>
-            <Grid container spacing={2} sx={{ mt: 3 }}>
-                <Grid item xs={6} >
+         <Container sx={{width:"80%",mt:3}}>
+
                     <TextField
                         id="outlined-basic"
                         label="Name"
@@ -86,41 +86,26 @@ export const Contact = () => {
                             },
                         }}
                     />
-                    <TextField
-                        id="outlined-basic"
-                        label="Email"
-                        variant="outlined"
-                        sx={{
-                            width: "100%",
-                            pb: 2,
-                            "& label.Mui-focused": {
-                                borderColor: "white",
-                            },
-                            "& .MuiInputBase-root": {
-                                backgroundColor: "#f0f0f0",
-                            },
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={6}>
+                
                   
                 {/* <Textarea minRows={2} /> */}
                     <TextareaAutosize
                         aria-label="minimum height"
                         minRows={3}
-                        placeholder={`${<h1>df,n</h1>}`}
+                        placeholder="Message"
                         style={{ width: "100%" ,
-                            height: 130,
+                        height: 130,
+                            
                             backgroundColor: "#f0f0f0",
                             borderRadius:"5px",
-                            borderColor:"#B8B8B8",padding:2
+                            borderColor:"#B8B8B8"
                         }}
                     />
-                </Grid>
-            </Grid>
+                
             <Box sx={{ width: "20%", mb: 5, margin: "auto" }}>
                 <StyledButton sx={{ width: "100%" }}>Send</StyledButton>
             </Box>
+                        </Container>
         </Container>
     );
 };

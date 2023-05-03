@@ -7,7 +7,7 @@ import { StyledTextField } from "../styled/TextFeild";
 import { StyledButton } from "../styled/Button";
 import Person3Icon from "@mui/icons-material/Person3";
 import { theme } from "../theme";
-import loginApi from "../Api/Login";
+import Api from "../Api/Api";
 
 const validationSchema = yup.object({
   email: yup
@@ -21,31 +21,42 @@ const validationSchema = yup.object({
 });
 
 export default function Login() {
+  
+  
+  const [error, setError] = useState("")
 
-    const [error,useError]=useState("")
+  function ErrorFun(e) {
+    setError(e)
+  }
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-    
-      loginApi
+    onSubmit: (values,actions) => {
+      const errors ={error:""};
+
+      Api
         .post(
-          "/login",{ email: values.email, password: values.password }
+          "/login", { email: values.email, password: values.password }
         )
         .then((response) => {
           console.log(response.data);
+
+          ErrorFun("")
         })
         .catch((e) => {
-            console.log(e.response.data.message);
+          console.log(e.response.data.message);
+          ErrorFun(e.response.data.message)
+          // console.log(actions.setErrors(values.email,"dfd"));
+          // console.log(error);
         });
-      
+
     },
   });
 
-  
+
 
   return (
     <Container
@@ -101,9 +112,10 @@ export default function Login() {
           label="Email"
           value={formik.values.email}
           onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email }
+          error={formik.touched.email && Boolean(formik.errors.email) }
+          helperText={(formik.touched.email && formik.errors.email) || <div style={{color:'red',fontSize:"15px"}}>{error}</div>}
         />
+        {/* {error} */}
         <StyledTextField
           fullWidth
           id="password"
