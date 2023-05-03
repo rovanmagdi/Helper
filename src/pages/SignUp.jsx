@@ -8,7 +8,6 @@ import { StyledButton } from "../styled/Button";
 import Person3Icon from "@mui/icons-material/Person3";
 import { theme } from "../theme";
 import loginApi from "../Api/Login";
-import { useNavigate } from "react-router";
 
 const validationSchema = yup.object({
   email: yup
@@ -41,10 +40,6 @@ export default function Login() {
     },
   });
 
-  const nagivate = useNavigate();
-  const handleSign = () => {
-    nagivate("/Sign_up");
-  };
   return (
     <Container
       sx={{
@@ -88,9 +83,20 @@ export default function Login() {
             />
           </Box>
           <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
-            Login
+            Sign Up
           </Typography>
         </Stack>
+
+        <StyledTextField
+          fullWidth
+          id="name"
+          name="name"
+          label="Name"
+          value={formik.values.name}
+          onChange={formik.handleChange}
+          error={formik.touched.name && Boolean(formik.errors.name)}
+          helperText={formik.touched.name && formik.errors.name}
+        />
 
         <StyledTextField
           fullWidth
@@ -102,6 +108,18 @@ export default function Login() {
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
         />
+         <StyledTextField
+          fullWidth
+          id="Phone"
+          name="phone"
+          label="phone"
+          value={formik.values.phone}
+          onChange={formik.handleChange}
+          error={formik.touched.phone && Boolean(formik.errors.phone)}
+          helperText={formik.touched.phone && formik.errors.phone}
+        />
+
+
         <StyledTextField
           fullWidth
           id="password"
@@ -113,15 +131,20 @@ export default function Login() {
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
         />
+
+<StyledTextField
+          fullWidth
+          id="confirm_password"
+          name="confirm_password"
+          label="Confirm Password"
+          type="password"
+          value={formik.values.confirm_password}
+          onChange={formik.handleChange}
+          error={formik.touched.confirm_password && Boolean(formik.errors.confirm_password)}
+          helperText={formik.touched.confirm_password && formik.errors.confirm_password}
+        />
         <Typography sx={{ textAlign: "right", fontSize: "10px" }}>
-          Are you have Create account ?{" "}
-          <Box
-            component="span"
-            sx={{ textDecoration: "underline", cursor: "pointer" }}
-            onClick={handleSign}
-          >
-            Sign Up
-          </Box>
+          Are you have Aready account ?
         </Typography>
 
         <Box sx={{ justifyContent: "center", display: "flex" }}>
