@@ -8,6 +8,7 @@ import { StyledButton } from "../styled/Button";
 import Person3Icon from "@mui/icons-material/Person3";
 import { theme } from "../theme";
 import Api from "../Api/Api";
+import { useNavigate } from "react-router";
 
 const validationSchema = yup.object({
   email: yup
@@ -21,8 +22,8 @@ const validationSchema = yup.object({
 });
 
 export default function Login() {
-  
-  
+
+
   const [error, setError] = useState("")
 
   function ErrorFun(e) {
@@ -34,8 +35,8 @@ export default function Login() {
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values,actions) => {
-      const errors ={error:""};
+    onSubmit: (values) => {
+
 
       Api
         .post(
@@ -56,7 +57,10 @@ export default function Login() {
     },
   });
 
-
+  const nagivate = useNavigate()
+  const handleSign = () => {
+    nagivate('/Sign_up')
+  }
 
   return (
     <Container
@@ -112,8 +116,8 @@ export default function Login() {
           label="Email"
           value={formik.values.email}
           onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email) }
-          helperText={(formik.touched.email && formik.errors.email) || <div style={{color:'red',fontSize:"15px"}}>{error}</div>}
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          helperText={(formik.touched.email && formik.errors.email) || <div style={{ color: 'red', fontSize: "15px" }}>{error}</div>}
         />
         {/* {error} */}
         <StyledTextField
@@ -126,7 +130,18 @@ export default function Login() {
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
+
         />
+        <Typography sx={{ textAlign: "right", fontSize: "10px" }}>
+          Are you have Create account ?{" "}
+          <Box
+            component="span"
+            sx={{ textDecoration: "underline", cursor: "pointer" }}
+            onClick={handleSign}
+          >
+            Sign Up
+          </Box>
+        </Typography>
 
         <Box sx={{ justifyContent: "center", display: "flex" }}>
           <StyledButton variant="contained" type="submit">
