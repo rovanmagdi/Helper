@@ -36,16 +36,16 @@ export default function Login() {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-
-
       Api
         .post(
           "/login", { email: values.email, password: values.password }
         )
         .then((response) => {
           console.log(response.data);
-
+          localStorage.setItem("user",JSON.stringify(response.data))
           ErrorFun("")
+          nagivate('/Profile_user')
+        
         })
         .catch((e) => {
           console.log(e.response.data.message);
@@ -132,11 +132,11 @@ export default function Login() {
           helperText={formik.touched.password && formik.errors.password}
 
         />
-        <Typography sx={{ textAlign: "right", fontSize: "10px" }}>
+        <Typography sx={{ textAlign: "right", fontSize: "10px",mb:3 }}>
           Are you have Create account ?{" "}
           <Box
             component="span"
-            sx={{ textDecoration: "underline", cursor: "pointer" }}
+            sx={{ textDecoration: "underline", cursor: "pointer"}}
             onClick={handleSign}
           >
             Sign Up

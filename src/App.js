@@ -12,6 +12,8 @@ import { Blogs } from "./pages/Blogs";
 import { Contact } from "./pages/Contact";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import { ProfileDetails } from "./pages/ProfileDetails";
+import { ProfileUser } from "./pages/ProfileUser";
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
           <Route path="/Contact_Us" element={<Contact />} />
           <Route path="/Log_in" element={<Login />} />
           <Route path="/Sign_up" element={<SignUp />} />
+          <Route path="/Profile_details" element={<ProfileDetails />} />
+          <Route path="/Profile_user" element={<ProfileUser />} />
 
 
 

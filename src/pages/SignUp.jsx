@@ -1,32 +1,45 @@
 import { Box, Container, Stack } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { Grid, Select, Typography } from "@mui/material";
+import { Grid, Select, TextField, Typography } from "@mui/material";
 import { StyledTextField } from "../styled/TextFeild";
 import { StyledButton } from "../styled/Button";
 import Person3Icon from "@mui/icons-material/Person3";
 import { theme } from "../theme";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Api from "../Api/Api";
+import { FormHelperText } from "@mui/joy";
+import { useNavigate } from "react-router";
 // import loginApi from "../Api/Login";
 
 const validationSchema = yup.object({
   name: yup
     .string("Enter your name")
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
     .required("Name is required"),
   phone: yup
     .string("Enter your phone")
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required("Phone is required"),
+    .length(11)
+    .required(),
   email: yup
     .string("Enter your email")
     .email("Enter a valid email")
     .required("Email is required"),
+  city: yup
+    .string("Enter your Speciality")
+    .required("Speciality is required"),
+
+  area: yup
+    .string("Enter your Speciality")
+    .required("Speciality is required"),
+
+  speciality: yup
+    .string("Enter your Speciality")
+    .required("Speciality is required"),
   password: yup
     .string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length")
@@ -34,37 +47,99 @@ const validationSchema = yup.object({
   confirm_password: yup
     .string("Enter your confirm_password")
     .min(8, "Password should be of minimum 8 characters length")
-    .oneOf([yup.ref('password'), null], 'Passwords must match')
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
 
+  // select: yup.string().required(),
 });
 
 export default function Login() {
-  const [error, useError] = useState("");
-  const [age, setAge] = React.useState('');
+  const [error, setError] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedArea, setSelectedArea] = useState("");
+  const [selectedSpeciality, setSelectedSpeciality] = useState("");
+  const [specialities, setSpecialities] = useState([]);
+  const [cities, setCities] = React.useState([]);
+  const [areas, setAreas] = React.useState([]);
+  const nagivate = useNavigate()
+  useEffect(() => {
+    Api.get("/cities")
+      .then((response) => {
+        // console.log(response.data);
+        setCities(response.data);
+      })
+      .catch((e) => {
+        // console.log(e.response.data.message);
+        // ErrorFun(e.response.data.message);
+      });
+
+    Api.get("/specialities")
+      .then((response) => {
+        // console.log(response.data);
+        setSpecialities(response.data);
+      })
+      .catch((e) => {
+        console.log(e.response.data.message);
+        // ErrorFun(e.response.data.message);
+      });
+  }, []);
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    // console.log(event.target);
+    setSelectedCity(event.target.value);
+    Api.get("/areas")
+      .then((response) => {
+        // console.log(response.data);
+        setAreas(response.data);
+      })
+      .catch((e) => {
+        console.log(e.response.data.message);
+        // ErrorFun(e.response.data.message);
+      });
   };
+
+
+  function ErrorFun(e) {
+    setError(e)
+  }
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
       phone: "",
+      city: "",
+      area: "",
+      speciality: "",
       confirm_password: "",
       password: "",
     },
     validationSchema: validationSchema,
+
     onSubmit: (values) => {
-      // loginApi
-      //   .post("/login", { email: values.email, password: values.password })
-      //   .then((response) => {
-      //     console.log(response.data);
-      //   })
-      //   .catch((e) => {
-      //     console.log(e.response.data.message);
-      //   });
+
+      console.log(values);
+      console.log("smhdg");
+      Api.post("/register", {
+        name: values.name,
+        phone: values.phone,
+        email: values.email,
+        password: values.password,
+        city_id: selectedCity,
+        area_id: selectedArea,
+        type: selectedSpeciality,
+      })
+        .then((response) => {
+          localStorage.setItem("user", response.data.data);
+          nagivate('/profile')
+        })
+        .catch((e) => {
+          ErrorFun(e.response.data.message);
+        });
     },
   });
+
+  const handleLogin = () => {
+    nagivate('/Log_in')
+  }
 
   return (
     <Container
@@ -75,7 +150,7 @@ export default function Login() {
         position: "relative",
       }}
     >
-      <Stack
+      <Box
         component="form"
         onSubmit={formik.handleSubmit}
         sx={{
@@ -113,6 +188,7 @@ export default function Login() {
           </Typography>
         </Stack>
 
+        {<div style={{ color: 'red', fontSize: "15px", margin: 10, textTransform: "capitalize" }}>{error}</div>}
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <StyledTextField
@@ -125,7 +201,7 @@ export default function Login() {
               error={formik.touched.name && Boolean(formik.errors.name)}
               helperText={formik.touched.name && formik.errors.name}
             />
-          </Grid >
+          </Grid>
           <Grid item xs={6}>
             <StyledTextField
               fullWidth
@@ -135,12 +211,11 @@ export default function Login() {
               value={formik.values.email}
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
+          helperText={formik.touched.email && formik.errors.email}
+
             />
           </Grid>
         </Grid>
-
-
 
         <StyledTextField
           fullWidth
@@ -153,56 +228,102 @@ export default function Login() {
           helperText={formik.touched.phone && formik.errors.phone}
         />
 
-<Grid container spacing={2}>
+        <Grid container spacing={2}>
           <Grid item xs={6}>
-             <FormControl fullWidth sx={{ mb: 4, backgroundColor: "#f0f0f0", }}>
-          <InputLabel id="demo-simple-select-label">City</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={age}
-            label="Age"
-            onChange={handleChange}
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
-            </Grid>
-            <Grid  item xs={6}>
-   <FormControl fullWidth sx={{ mb: 4, backgroundColor: "#f0f0f0", }}>
-          <InputLabel id="demo-simple-select-label">Area</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={age}
-            label="Age"
-            onChange={handleChange}
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
-            </Grid>
-            </Grid>
-       
+            <FormControl fullWidth sx={{ mb: 4, backgroundColor: "#f0f0f0" }}>
+              <InputLabel id="demo-simple-select-label">City</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedCity}
+                label="City"
+                onChange={(event) => {
+                  handleChange(event);
+                  formik.handleChange(event)
+                }}
+                name="city"
 
-     
 
-        <FormControl fullWidth sx={{ mb: 4, backgroundColor: "#f0f0f0", }}>
+              error={formik.touched.city && Boolean(formik.errors.city)}
+              // helperText={formik.touched.city && formik.errors.city}
+              >
+                
+                {cities.map((a) => {
+                  return (
+                    <MenuItem value={a.id} key={a.id}>
+                      {a.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+
+
+
+            <FormControl fullWidth sx={{ mb: 4, backgroundColor: "#f0f0f0" }}>
+              <InputLabel id="demo-simple-select-label">Area</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={formik.values.area}
+                label="Area"
+                name="area"
+
+                error={
+                  formik.touched.area &&
+                  Boolean(formik.errors.area)
+                }
+                // helperText={
+                //   formik.touched.area &&
+                //   formik.errors.area
+                // }
+                onChange={(event) => {
+                  formik.handleChange(event);
+                  setSelectedArea(event.target.value);
+                  console.log(event);
+
+                }}
+              >
+                {areas.map((a, id) => {
+                  return (
+                    <MenuItem value={a.id} key={a.id}>
+                      {a.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+
+        <FormControl fullWidth sx={{ mb: 4, backgroundColor: "#f0f0f0" }}>
           <InputLabel id="demo-simple-select-label">Speciality</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={age}
-            label="Age"
-            onChange={handleChange}
+            value={selectedSpeciality}
+            label="speciality"
+            name="speciality"
+
+
+            onChange={(event) => {
+              formik.handleChange(event);
+              setSelectedSpeciality(event.target.value)
+              console.log(event);
+
+            }}
+
+            error={formik.touched.speciality && Boolean(formik.errors.speciality) }
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {specialities.map((a) => {
+              return (
+                <MenuItem value={a.id} key={a.id}>
+                  {a.name}
+                </MenuItem>
+              );
+            })}
           </Select>
         </FormControl>
         <StyledTextField
@@ -225,11 +346,22 @@ export default function Login() {
           type="password"
           value={formik.values.confirm_password}
           onChange={formik.handleChange}
-          error={formik.touched.confirm_password && Boolean(formik.errors.confirm_password)}
-          helperText={formik.touched.confirm_password && formik.errors.confirm_password}
+          error={
+            formik.touched.confirm_password &&
+            Boolean(formik.errors.confirm_password)
+          }
+          helperText={
+            formik.touched.confirm_password && formik.errors.confirm_password
+          }
         />
-        <Typography sx={{ textAlign: "right", fontSize: "10px" }}>
-          Are you have Aready account ?
+        <Typography sx={{ textAlign: "right", fontSize: "10px", mb: 3 }}>
+          Are you have Aready account ? <Box
+            component="span"
+            sx={{ textDecoration: "underline", cursor: "pointer" }}
+            onClick={handleLogin}
+          >
+            LogIn
+          </Box>
         </Typography>
 
         <Box sx={{ justifyContent: "center", display: "flex" }}>
@@ -237,7 +369,7 @@ export default function Login() {
             Sign Up
           </StyledButton>
         </Box>
-      </Stack>
+      </Box>
     </Container>
   );
 }

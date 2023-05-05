@@ -11,31 +11,77 @@ import { theme } from "../theme";
 import ClearIcon from "@mui/icons-material/Clear";
 import { StyledButton } from "../styled/Button";
 import { useNavigate } from "react-router";
+import ImgMan from "../assets/man.png";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
 
 const pages = ["Home", "About_US", "Services", "Blogs", "Contact_Us"];
 
 function Navbar() {
   const [nav, setNav] = React.useState(true);
   const [active, setActive] = React.useState("Home");
+  const user = JSON.parse(localStorage.getItem("user"));
+  const nagivate = useNavigate();
+  const handleClick = (link) => {
+    nagivate(`/${link}`);
+    setActive(link);
+  };
 
-  const nagivate=useNavigate()
-  const handleClick=(link)=>
-  {
-    nagivate(`/${link}`)
-    setActive(link)
+  const handleLogin = () => {
+    nagivate("/Log_in");
+    console.log("done");
+  };
+
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setOpen(false);
+    } else if (event.key === "Escape") {
+      setOpen(false);
+    }
   }
 
-  const handleLogin=()=>
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = React.useRef(open);
+  React.useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
+
+  const handleLogOut=()=>
   {
-    nagivate("/Log_in")
-    console.log("done");
+    localStorage.clear();
+    nagivate('/')
   }
 
   return (
     <Box
       position="fixed"
       width="100%"
-      sx={{ backgroundColor: "rgba(249,249,249,0.9);",zIndex:100 }}
+      sx={{ backgroundColor: "rgba(249,249,249,0.9);", zIndex: 100 }}
     >
       <Container>
         <Stack
@@ -65,40 +111,110 @@ function Navbar() {
               {pages.map((page) => (
                 <Typography
                   key={page}
-                  onClick={()=>handleClick(page)}
+                  onClick={() => handleClick(page)}
                   sx={{
                     ml: 2,
                     display: "block",
                     fontWeight: "bold",
                     color: `${
-                      active === page ? `${theme.palette.primary.main}` : "black"
+                      active === page
+                        ? `${theme.palette.primary.main}`
+                        : "black"
                     } `,
                     "&:hover": {
                       cursor: "pointer",
-                    
                     },
                   }}
                 >
-                  {page.includes("_")?(<>{page.replace("_"," ")}</>):(<>{page}</>)}
+                  {page.includes("_") ? (
+                    <>{page.replace("_", " ")}</>
+                  ) : (
+                    <>{page}</>
+                  )}
                 </Typography>
               ))}
             </Box>
+            {user ? (
+              <>
+                <Box
+                  component="img"
+                  src={ImgMan}
+                  sx={{ width: "40px",pl:3}}
+                />
 
-            <Button
-            onClick={handleLogin}
-              sx={{
-                display: { xs: "none", md: "flex" },
-                backgroundColor: `${theme.palette.primary.main}`,
-                color: "white",
-                fontWeight: "bold",
-                marginLeft: "10px",
-                "&:hover": {
-                  backgroundColor: "#117951",
-                },
-              }}
-            >
-              Login{" "}
-            </Button>
+                <div>
+                  <Button
+                    ref={anchorRef}
+                    id="composition-button"
+                    aria-controls={open ? "composition-menu" : undefined}
+                    aria-expanded={open ? "true" : undefined}
+                    aria-haspopup="true"
+                    onClick={handleToggle}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        textTransform: "capitalize",
+                        fontSize: "15px",
+                        color: `${theme.palette.primary.main}`,
+                      }}
+                    >
+                      {user.user.name}
+                    </Typography>
+                  </Button>
+                  <Popper
+                    open={open}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    placement="bottom-start"
+                    transition
+                    disablePortal
+                  >
+                    {({ TransitionProps, placement }) => (
+                      <Grow
+                        {...TransitionProps}
+                        style={{
+                          transformOrigin:
+                            placement === "bottom-start"
+                              ? "left top"
+                              : "left bottom",
+                        }}
+                      >
+                        <Paper>
+                          <ClickAwayListener onClickAway={handleClose}>
+                            <MenuList
+                              autoFocusItem={open}
+                              id="composition-menu"
+                              aria-labelledby="composition-button"
+                              onKeyDown={handleListKeyDown}
+                            >
+                              <MenuItem onClick={handleClose}>Profile</MenuItem>
+                              <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                            </MenuList>
+                          </ClickAwayListener>
+                        </Paper>
+                      </Grow>
+                    )}
+                  </Popper>
+                </div>
+              </>
+            ) : (
+              <Button
+                onClick={handleLogin}
+                sx={{
+                  display: { xs: "none", md: "flex" },
+                  backgroundColor: `${theme.palette.primary.main}`,
+                  color: "white",
+                  fontWeight: "bold",
+                  marginLeft: "10px",
+                  "&:hover": {
+                    backgroundColor: "#117951",
+                  },
+                }}
+              >
+                Login{" "}
+              </Button>
+            )}
           </Box>
         </Stack>
         <Stack
@@ -152,8 +268,11 @@ function Navbar() {
                 {page}
               </Typography>
             ))}
-
-            <StyledButton onClick={handleLogin}>Login</StyledButton>
+            {user ? (
+              <>iuh</>
+            ) : (
+              <StyledButton onClick={handleLogin}>Login</StyledButton>
+            )}
           </Box>
         )}
       </Container>
