@@ -21,21 +21,19 @@ const validationSchema = yup.object({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Name is required"),
-  phone: yup
-    .string("Enter your phone")
-    .length(11)
-    .required(),
+  phone: yup.string("Enter your phone").length(11).required(),
   email: yup
     .string("Enter your email")
     .email("Enter a valid email")
     .required("Email is required"),
-  city: yup
-    .string("Enter your Speciality")
-    .required("Speciality is required"),
+  city: yup.string("Enter your Speciality").required("Speciality is required"),
 
-  area: yup
-    .string("Enter your Speciality")
-    .required("Speciality is required"),
+  area: yup.string("Enter your Speciality").required("Speciality is required"),
+  type: yup.string("Enter your type").required("type is required"),
+
+  price: yup
+  .string("Enter your Speciality")
+  .required("Speciality is required"),
 
   speciality: yup
     .string("Enter your Speciality")
@@ -60,7 +58,9 @@ export default function Login() {
   const [specialities, setSpecialities] = useState([]);
   const [cities, setCities] = React.useState([]);
   const [areas, setAreas] = React.useState([]);
-  const nagivate = useNavigate()
+ 
+  const [selectedtype, setSelectedType] = React.useState("");
+  const nagivate = useNavigate();
   useEffect(() => {
     Api.get("/cities")
       .then((response) => {
@@ -97,9 +97,8 @@ export default function Login() {
       });
   };
 
-
   function ErrorFun(e) {
-    setError(e)
+    setError(e);
   }
   const formik = useFormik({
     initialValues: {
@@ -108,16 +107,17 @@ export default function Login() {
       phone: "",
       city: "",
       area: "",
+      price:"",
       speciality: "",
+      type: "",
       confirm_password: "",
       password: "",
     },
     validationSchema: validationSchema,
 
     onSubmit: (values) => {
-
       console.log(values);
-      console.log("smhdg");
+
       Api.post("/register", {
         name: values.name,
         phone: values.phone,
@@ -125,11 +125,17 @@ export default function Login() {
         password: values.password,
         city_id: selectedCity,
         area_id: selectedArea,
-        type: selectedSpeciality,
+        price_per_hour: values.price,
+        type: selectedtype,
+        speciality_id: selectedSpeciality,
       })
         .then((response) => {
-          localStorage.setItem("user", response.data.data);
-          nagivate('/profile')
+          console.log(response.data);
+
+          console.log(response.data.user);
+          localStorage.setItem("user",JSON.stringify(response.data));
+
+          nagivate("/Log_in");
         })
         .catch((e) => {
           ErrorFun(e.response.data.message);
@@ -138,8 +144,9 @@ export default function Login() {
   });
 
   const handleLogin = () => {
-    nagivate('/Log_in')
-  }
+    nagivate("/Log_in");
+  };
+ 
 
   return (
     <Container
@@ -188,7 +195,18 @@ export default function Login() {
           </Typography>
         </Stack>
 
-        {<div style={{ color: 'red', fontSize: "15px", margin: 10, textTransform: "capitalize" }}>{error}</div>}
+        {
+          <div
+            style={{
+              color: "red",
+              fontSize: "15px",
+              margin: 10,
+              textTransform: "capitalize",
+            }}
+          >
+            {error}
+          </div>
+        }
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <StyledTextField
@@ -211,8 +229,7 @@ export default function Login() {
               value={formik.values.email}
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-
+              helperText={formik.touched.email && formik.errors.email}
             />
           </Grid>
         </Grid>
@@ -239,15 +256,12 @@ export default function Login() {
                 label="City"
                 onChange={(event) => {
                   handleChange(event);
-                  formik.handleChange(event)
+                  formik.handleChange(event);
                 }}
                 name="city"
-
-
-              error={formik.touched.city && Boolean(formik.errors.city)}
-              // helperText={formik.touched.city && formik.errors.city}
+                error={formik.touched.city && Boolean(formik.errors.city)}
+                // helperText={formik.touched.city && formik.errors.city}
               >
-                
                 {cities.map((a) => {
                   return (
                     <MenuItem value={a.id} key={a.id}>
@@ -259,9 +273,6 @@ export default function Login() {
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-
-
-
             <FormControl fullWidth sx={{ mb: 4, backgroundColor: "#f0f0f0" }}>
               <InputLabel id="demo-simple-select-label">Area</InputLabel>
               <Select
@@ -270,11 +281,7 @@ export default function Login() {
                 value={formik.values.area}
                 label="Area"
                 name="area"
-
-                error={
-                  formik.touched.area &&
-                  Boolean(formik.errors.area)
-                }
+                error={formik.touched.area && Boolean(formik.errors.area)}
                 // helperText={
                 //   formik.touched.area &&
                 //   formik.errors.area
@@ -283,7 +290,6 @@ export default function Login() {
                   formik.handleChange(event);
                   setSelectedArea(event.target.value);
                   console.log(event);
-
                 }}
               >
                 {areas.map((a, id) => {
@@ -299,33 +305,76 @@ export default function Login() {
         </Grid>
 
         <FormControl fullWidth sx={{ mb: 4, backgroundColor: "#f0f0f0" }}>
-          <InputLabel id="demo-simple-select-label">Speciality</InputLabel>
+          <InputLabel id="demo-simple-select-label">Type</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={selectedSpeciality}
-            label="speciality"
-            name="speciality"
-
-
+            value={selectedtype}
+            label="Type"
+            name="type"
             onChange={(event) => {
               formik.handleChange(event);
-              setSelectedSpeciality(event.target.value)
+              setSelectedType(event.target.value);
               console.log(event);
-
             }}
-
-            error={formik.touched.speciality && Boolean(formik.errors.speciality) }
+            error={formik.touched.type && Boolean(formik.errors.type)}
           >
-            {specialities.map((a) => {
-              return (
-                <MenuItem value={a.id} key={a.id}>
-                  {a.name}
+            {/* {types.map((a) => {
+              return ( */}
+                <MenuItem value="user">
+                 user
                 </MenuItem>
-              );
-            })}
+                <MenuItem value="specialist">
+                specialist
+                </MenuItem>
+              {/* );
+            })} */}
           </Select>
         </FormControl>
+        {selectedtype === "specialist" ? (
+          <>
+            <FormControl fullWidth sx={{ mb: 4, backgroundColor: "#f0f0f0" }}>
+              <InputLabel id="demo-simple-select-label">Speciality</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedSpeciality}
+                label="speciality"
+                name="speciality"
+                onChange={(event) => {
+                  formik.handleChange(event);
+                  setSelectedSpeciality(event.target.value);
+                  console.log(event);
+                }}
+                error={
+                  formik.touched.speciality && Boolean(formik.errors.speciality)
+                }
+              >
+                {specialities.map((a) => {
+                  return (
+                    <MenuItem value={a.id} key={a.id}>
+                      {a.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <StyledTextField
+              fullWidth
+              id="price"
+              name="price"
+              type="number"
+              label="Price"
+              value={formik.values.price}
+              onChange={formik.handleChange}
+              error={formik.touched.price && Boolean(formik.errors.price)}
+              helperText={formik.touched.price && formik.errors.price}
+            />
+          </>
+        ) : (
+          <></>
+        )}
+
         <StyledTextField
           fullWidth
           id="password"
@@ -355,7 +404,8 @@ export default function Login() {
           }
         />
         <Typography sx={{ textAlign: "right", fontSize: "10px", mb: 3 }}>
-          Are you have Aready account ? <Box
+          Are you have Aready account ?{" "}
+          <Box
             component="span"
             sx={{ textDecoration: "underline", cursor: "pointer" }}
             onClick={handleLogin}

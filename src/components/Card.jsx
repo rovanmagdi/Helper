@@ -50,14 +50,14 @@ export function ImgMediaCard({ title }) {
   );
 }
 
-export default function ServicesCard({title}) {
+export default function ServicesCard({title,area,city,job,imgJob}) {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
         alt="green iguana"
         height="140"
-        image="/static/images/cards/contemplative-reptile.jpg"
+        image={`https://helpers.amr-eissa.tech/public/${imgJob}`}
       />
       <CardContent>
         <Box sx={{ display: "flex" }}>
@@ -72,10 +72,10 @@ export default function ServicesCard({title}) {
             sx={{ fontWeight: "bold", pt: 1, px: 1 }}
           >
             {title}
-            <Typography >Plumber</Typography>
+            <Typography >{job}</Typography>
             <Box sx={{pt:1,pb:1,display:"flex",alignItems:"center"}}>
               <LocationOnOutlinedIcon sx={{color:`${theme.palette.primary.main}`}}/>
-              <Typography sx={{fontSize:"0.8rem",fontWeight:"bold",color:"gray",}}>Nasr City , Cairo
+              <Typography sx={{fontSize:"0.8rem",fontWeight:"bold",color:"gray",}}>{area} , {city}
                 </Typography> 
             </Box>
           <Rating name="half-rating" defaultValue={2.5} precision={0.5} />

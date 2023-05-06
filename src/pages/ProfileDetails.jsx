@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Container,
   Divider,
@@ -9,7 +10,7 @@ import {
   // Box,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { theme } from "../theme/index";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { StyledButton } from "../styled/Button";
@@ -19,6 +20,7 @@ import Tab from "@mui/material/Tab";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import FeedbackOutlinedIcon from "@mui/icons-material/FeedbackOutlined";
 import HomeRepairServiceOutlinedIcon from "@mui/icons-material/HomeRepairServiceOutlined";
+import { FormDialog, FormDialogError } from "../components/Pop";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -53,11 +55,13 @@ function a11yProps(index) {
 }
 export const ProfileDetails = () => {
   const [value, setValue] = React.useState(2);
+  const [alert, setAlert] = useState(false)
   // const [valueTab, setValueTab] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const user = JSON.parse(localStorage.getItem("user"))
 
   return (
     <Container
@@ -164,8 +168,14 @@ export const ProfileDetails = () => {
               }}
             />
           </Box>
-          <StyledButton sx={{ mt: 3 }}>Order Now</StyledButton>
+          
 
+          {user ? (<>
+            <FormDialog title={<StyledButton sx={{ mt: 3 }}>Order Now</StyledButton>} />
+          </>) : (<>
+            <FormDialogError title={<StyledButton sx={{ mt: 3 }} >Order Now</StyledButton>} />
+
+          </>)}
           <Box sx={{ width: "100%", mt: 2 }}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <Tabs
@@ -279,7 +289,7 @@ export const ProfileDetails = () => {
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Grid container spacing={2}>
-                <Grid item lg={6} xs ={12} sx={{
+                <Grid item lg={6} xs={12} sx={{
                   width: "auto",
                   border: "1px solid gray",
                   p: 2,

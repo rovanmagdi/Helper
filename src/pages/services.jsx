@@ -7,42 +7,60 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import aboutImg from "../assets/services.png";
 import ServicesCard, { ImgMediaCard } from "../components/Card";
 import { StyledBoxFooter } from "../styled/Box";
+import Api from "../Api/Api";
 
 function Services() {
-  const languagesList = ["Javascript", "php", "python", "electron"];
-  const [userinfo, setUserInfo] = useState({
-    languages: [],
-    response: [],
+  const [specialities, setSpecialities] = useState([
+
+  ])
+  const [services, setServices] = useState([]);
+  const [checked,setChecked]=useState("")
+
+
+
+ 
+  
+
+  const [toCheck, setToCheck] = useState({});
+  const filterProducts = (value) =>
+  setToCheck((prev) => {
+    return { ...prev, [value]: !!!prev[value] };
   });
 
-  const handleChange = (e) => {
-    // Destructuring
-    const { value, checked } = e.target;
-    const { languages } = userinfo;
 
-    console.log(`${value} is ${checked}`);
 
-    // Case 1 : The user checks the box
-    if (checked) {
-      setUserInfo({
-        languages: [...languages, value],
-        response: [...languages, value],
+
+  const token = JSON.parse(localStorage.getItem("user")).token;
+
+  useEffect(() => {
+    Api.get(`/specialists_with_speciality`, {
+      headers: { Authorization: `Bearer ${token}` },
+
+    })
+      .then((response) => {
+        console.log(response.data.specialists);
+
+        setServices(response.data.specialists )
+
+      })
+      .catch((e) => {
+        console.log(e.response.data.message);
       });
-    }
 
-    // Case 2 : The user unchecks the box
-    else {
-      setUserInfo({
-        languages: languages.filter((e) => e !== value),
-        response: languages.filter((e) => e !== value),
+    Api.get("/specialities")
+      .then((response) => {
+        console.log(response.data);
+        setSpecialities(response.data);
+      })
+      .catch((e) => {
+        console.log(e.response.data.message);
+        // ErrorFun(e.response.data.message);
       });
-    }
-  };
-
+  }, [token])
   return (
     <Container
       sx={{
@@ -100,31 +118,42 @@ function Services() {
               name="languages"
               value="All"
               id="flexCheckDefault"
-              onChange={handleChange}
+              // onChange={handleChange}
             />
             <Typography>All</Typography>
           </Box>
-          {languagesList.map((lang, id) => {
+          {specialities?.map((lang, id) => {
             return (
               <Box key={id} sx={{ display: "flex", alignItems: "center" }}>
                 <Checkbox
                   type="checkbox"
                   name="languages"
-                  value={lang}
+                  // value={lang.name}
                   id="flexCheckDefault"
-                  onChange={handleChange}
+                  onChange={(e) => filterProducts(e.target.value)}
                 />
-                <Typography>{lang}</Typography>
+                <Typography>{lang.name}</Typography>
               </Box>
             );
           })}
         </Box>
-
         <Grid container spacing={2} sx={{ px: 2 }}>
-          {userinfo.response.map((res, id) => {
+          {services
+          .filter((prod) =>
+            Object.keys(toCheck).length === 0 ? true : !!toCheck[prod.speciality?.name]
+          )?.map((res, id) => {
+          //  console.log(filteredProducts);
             return (
               <Grid key={id} item xs={4}>
-                <ServicesCard onChange={handleChange} title={res} />
+               
+                <ServicesCard 
+                
+                title={res.name}
+                  area={res.areas?.name}
+                  city={res.cities?.name}
+                  job={res.speciality?.name}
+                  imgJob={res.speciality?.image_path} 
+                />
               </Grid>
             );
           })}
