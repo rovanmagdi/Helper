@@ -51,6 +51,10 @@ function Navbar() {
     setOpen(false);
   };
 
+  const handleProfile = () => {
+   nagivate('/Profile_user')
+  };
+
   function handleListKeyDown(event) {
     if (event.key === "Tab") {
       event.preventDefault();
@@ -188,7 +192,7 @@ function Navbar() {
                               aria-labelledby="composition-button"
                               onKeyDown={handleListKeyDown}
                             >
-                              <MenuItem onClick={handleClose}>Profile</MenuItem>
+                              <MenuItem onClick={(event)=>{handleClose(event);handleProfile()}}>Profile</MenuItem>
                               <MenuItem onClick={handleLogOut}>Logout</MenuItem>
                             </MenuList>
                           </ClickAwayListener>

@@ -1,12 +1,42 @@
-import { React } from "react";
-import { Stack, Box, TextField } from "@mui/material";
+import { React, useState } from "react";
+import { Stack, Box, TextField, Typography, Alert } from "@mui/material";
 // import WebFont from 'webfontloader';
 import { theme } from "../../theme/index";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { StyledTypographyTitle } from "../../styled/Typography";
 import { StyledButton } from "../../styled/Button";
+import Api from "../../Api/Api";
 
 const Contact = () => {
+  const token = JSON.parse(localStorage.getItem("user"))?.token;
+  const id = JSON.parse(localStorage.getItem("user"))?.id;
+
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [error, setError] = useState('')
+  const [alertSuccess, setSucces] = useState(false);
+  const handleClick = () => {
+    Api.post(
+      "/store_contact_message",
+      { user_id: id, title: title, description: description },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+      .then((response) => {
+        console.log(response.data.message);
+        setError('')
+        setSucces(true)
+        setTimeout(() => {
+        setSucces(false)
+          
+        }, 4000);
+      })
+      .catch((e) => {
+        console.log(e.response.data.message);
+        setError(e.response.data.message);
+      });
+  }
   return (
     <Stack
       id="Contact"
@@ -45,29 +75,35 @@ const Contact = () => {
           WHAT CUSTOMERS SAY
         </Box>
 
+        <Typography sx={{ color: "red" }}>{error}</Typography>
+        {alertSuccess && (
+        <Alert
+          variant="filled"
+          severity="success"
+          sx={{ position: "fixed", top: 90, right: 0, zIndex: 100 }}
+        >
+          Message sended Successful ..
+        </Alert>
+      )}
         <Box component="div" sx={{ mb: 5 }}>
           <TextField
             id="outlined-basic"
-            label="Full Name"
+            label="Title"
             variant="outlined"
+            onChange={(e) => setTitle(e.target.value)}
+
             sx={{ width: "500px" }}
           />
         </Box>
 
-        <Box component="div" sx={{ mb: 5 }}>
-          <TextField
-            id="outlined-basic"
-            label="Email"
-            variant="outlined"
-            sx={{ width: "500px" }}
-          />
-        </Box>
+
 
         <Box component="div" sx={{ mb: 5 }}>
           <TextField
             id="outlined-basic"
             label="Message"
             variant="outlined"
+            onChange={(e) => setDescription(e.target.value)}
             sx={{
               width: "500px",
               "& .MuiInputBase-root": {
@@ -79,6 +115,7 @@ const Contact = () => {
         <StyledButton
           endIcon={<ChevronRightIcon />}
           sx={{ width: "200px", p: 1 }}
+          onClick={handleClick}
         >
           {" "}
           Send Message

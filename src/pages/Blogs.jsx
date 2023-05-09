@@ -29,7 +29,7 @@ export const Blogs = () => {
       <Stack sx={{ textAlign: "center", gap: 8 }}>
         <Box
           component="img"
-          src={blogImg}
+          src={`https://helpers.amr-eissa.tech/public/${blogImg}`}
           sx={{ width: "16%", position: "absolute" }}
         ></Box>
         <Typography variant="h4" sx={{ fontWeight: "bold" }}>
@@ -70,7 +70,6 @@ export const Blogs = () => {
               </Typography>
               <Typography dangerouslySetInnerHTML={{ __html: blog.description }} />
 
-              <StyledButton>Read more</StyledButton>
             </Box>
           </Stack>
 

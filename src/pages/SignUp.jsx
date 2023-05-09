@@ -29,15 +29,15 @@ const validationSchema = yup.object({
   city: yup.string("Enter your Speciality").required("Speciality is required"),
 
   area: yup.string("Enter your Speciality").required("Speciality is required"),
-  type: yup.string("Enter your type").required("type is required"),
+  // type: yup.string("Enter your type").required("type is required"),
 
   price: yup
-  .string("Enter your Speciality")
-  .required("Speciality is required"),
+  .string("Enter your Speciality"),
+  // .required("Speciality is required"),
 
   speciality: yup
-    .string("Enter your Speciality")
-    .required("Speciality is required"),
+    .string("Enter your Speciality"),
+    
   password: yup
     .string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length")

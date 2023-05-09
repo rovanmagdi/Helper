@@ -5,12 +5,12 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { Box, Button, Rating } from "@mui/material";
+import { Box, Button, Rating, Stack } from "@mui/material";
 import img from "../assets/worker.png";
 import { StyledButton } from "../styled/Button";
 import { theme } from "../theme/index";
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-export function ImgMediaCard({ title }) {
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+export function ImgMediaCard({ title ,image,description,date}) {
   return (
     <Card
       sx={{
@@ -26,7 +26,7 @@ export function ImgMediaCard({ title }) {
         component="img"
         alt="green iguana"
         height="140"
-        image="/static/images/cards/contemplative-reptile.jpg"
+        image={`https://helpers.amr-eissa.tech/public/${image}`}
       />
       <CardContent>
         <Typography
@@ -37,22 +37,19 @@ export function ImgMediaCard({ title }) {
         >
           {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
-        </Typography>
+       
       </CardContent>
       <CardActions sx={{ color: "lightgray" }}>
         <CalendarMonthIcon />
-        <Typography sx={{ px: 1 }}>01/12/2023</Typography>
+        <Typography sx={{ px: 1 }}>{date}</Typography>
       </CardActions>
     </Card>
   );
 }
 
-export default function ServicesCard({title,area,city,job,imgJob}) {
+export default function ServicesCard({ title, area, city, job, imgJob,rate,click }) {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345 }} onClick={click}>
       <CardMedia
         component="img"
         alt="green iguana"
@@ -60,31 +57,46 @@ export default function ServicesCard({title,area,city,job,imgJob}) {
         image={`https://helpers.amr-eissa.tech/public/${imgJob}`}
       />
       <CardContent>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex" ,alignItems:"center"}}>
           <Box
             component="img"
             src={img}
             sx={{ width: "10%", height: "10%", borderRadius: "50%" }}
           />
+          <Typography 
+            variant="p"
+            >
+
+            {title}
+          </Typography>
+            </Box>
           <Typography
             gutterBottom
-            component="div"
+            component="p"
             sx={{ fontWeight: "bold", pt: 1, px: 1 }}
           >
-            {title}
-            <Typography >{job}</Typography>
-            <Box sx={{pt:1,pb:1,display:"flex",alignItems:"center"}}>
-              <LocationOnOutlinedIcon sx={{color:`${theme.palette.primary.main}`}}/>
-              <Typography sx={{fontSize:"0.8rem",fontWeight:"bold",color:"gray",}}>{area} , {city}
-                </Typography> 
-            </Box>
-          <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+            <Typography >
+              {job}
+            </Typography>
+            <Typography sx={{ pt: 1, pb: 1, display: "flex", alignItems: "center" }}>
+              
+              <LocationOnOutlinedIcon
+                sx={{ color: `${theme.palette.primary.main}` }}
+              />
+             
+              <Typography
+                component={"p"}
+                variant={"body2"}
+                sx={{ fontSize: "0.8rem", fontWeight: "bold", color: "gray" }}
+              >
+                {area} , {city}
+              </Typography>
+            </Typography>
+            
+            <Rating name="half-rating" defaultValue={rate} precision={0.5} />
           </Typography>
-        <StyledButton sx={{height:'10%'}}>Order</StyledButton>
-        </Box>
       </CardContent>
-      <CardActions>
-      </CardActions>
+    
     </Card>
   );
 }

@@ -84,7 +84,9 @@ export const Works = () => {
                 </Box>
 
             </Stack>
-            {imageList === [] ? (<Grid container >
+            {imageList !== [] ? 
+            
+            (<Grid container >
                 {imageList?.map((image) => {
                     console.log(image);
                     return (

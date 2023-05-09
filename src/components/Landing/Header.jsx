@@ -1,11 +1,19 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import backgroundImg from "../../assets/home-back.svg";
 import heroImg from "../../assets/hero.png";
 import { theme } from "../../theme";
 import { StyledButton } from "../../styled/Button";
+import { useNavigate } from "react-router";
+import { FormDialogError } from "../Pop";
 
 const Header = () => {
+  const token = JSON.parse(localStorage.getItem("user"))?.token;
+
+  const nagivate = useNavigate();
+  const handleClick = () => {
+    nagivate("/Services");
+  };
   return (
     <Stack
       sx={{
@@ -41,7 +49,17 @@ const Header = () => {
           Rely on us and request maintenance services through qualified and
           reliable maintenance technicians
         </Typography>
-        <StyledButton sx={{ mt: 2 }}>Order Now </StyledButton>
+        {token ? (
+          <StyledButton sx={{ mt: 2 }} onClick={handleClick}>
+            Order now{" "}
+          </StyledButton>
+        ) : (
+          <>
+            <FormDialogError
+              title={<StyledButton sx={{ m: 3 }}>Order now</StyledButton>}
+            />
+          </>
+        )}
       </Box>
       <Box
         component="img"
@@ -49,7 +67,6 @@ const Header = () => {
         // height="50%"
         sx={{
           maxWidth: "60%",
-        
 
           "@media(max-width: 1091px)": {
             marginLeft: 0,

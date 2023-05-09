@@ -24,6 +24,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { OrderHistory } from "../components/OrderHistory";
 import { Works } from "../components/Works";
+import { OrderIncome } from "../components/OrderIncome";
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -37,7 +38,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    <Stack>{children}</Stack>
                 </Box>
             )}
         </div>
@@ -155,16 +156,20 @@ export const ProfileUser = () => {
                         >
                             {fullName}
                         </Typography>
+                        <Typography sx={{color:`${theme.palette.primary.main}`,fontWeight:"bold"}}>
+
+                        {user?.user?.speciality?.name }
+                        </Typography>
                         <TextField
                             id="outlined-error"
                             label="Name"
-                            defaultValue={user.user.name}
+                            defaultValue={user?.user?.name}
                             sx={{ display: isEdit === true ? "block" : "none" }}
                             value={fullName}
                             onChange={(event) => setFullName(event.target.value)}
                         />
-                        {user.type === "user" ? (
-                            <></>
+                        {user?.type === "user"||"admin" ? (
+                            <> </>
                         ) : (
                             <Typography
                                 sx={{
@@ -172,7 +177,7 @@ export const ProfileUser = () => {
                                     fontWeight: "bold",
                                 }}
                             >
-                                {user.user.speciality.name}
+                                {user?.user.speciality.name}
                             </Typography>
                         )}
                     </Box>
@@ -186,7 +191,8 @@ export const ProfileUser = () => {
                                 // display: isEdit === true ? "none" : "block",
                             }}
                         >
-                            Nasr City, Cairo
+                 {user?.user?.areas?.name}, {user?.user?.cities?.name}, Egypt
+
                         </Typography>
                     </Box>
                 </Box>
@@ -296,7 +302,7 @@ export const ProfileUser = () => {
                             // value=
                             />
                             <Box sx={{ display: isEdit === true ? "none" : "block" }}>
-                                {user.user.areas.name}, {user.user.cities.name}, Egypt
+                                {user?.user?.areas?.name}, {user?.user?.cities?.name}, Egypt
                             </Box>
                         </Grid>
                     </Grid>
@@ -376,6 +382,10 @@ export const ProfileUser = () => {
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Works />
+                </TabPanel>
+                <TabPanel value={value} index={3}>
+                    <OrderIncome/>
+                    {/* <Works /> */}
                 </TabPanel>
             </Box>
 
