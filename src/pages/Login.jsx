@@ -9,6 +9,7 @@ import Person3Icon from "@mui/icons-material/Person3";
 import { theme } from "../theme";
 import Api from "../Api/Api";
 import { useNavigate } from "react-router";
+import { Loading } from "../components/Loading";
 
 const validationSchema = yup.object({
   email: yup
@@ -25,6 +26,7 @@ export default function Login() {
 
 
   const [error, setError] = useState("")
+  const [alert, setAlert] = useState(false)
 
   function ErrorFun(e) {
     setError(e)
@@ -45,6 +47,7 @@ export default function Login() {
           localStorage.setItem("user",JSON.stringify(response.data))
           ErrorFun("")
           nagivate('/Profile_user')
+          setAlert(true)
         
         })
         .catch((e) => {
@@ -108,6 +111,8 @@ export default function Login() {
             Login
           </Typography>
         </Stack>
+       
+        <div style={{ color: 'red', fontSize: "15px" }}>{error}</div>
 
         <StyledTextField
           fullWidth
@@ -117,9 +122,8 @@ export default function Login() {
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={(formik.touched.email && formik.errors.email) || <div style={{ color: 'red', fontSize: "15px" }}>{error}</div>}
+          helperText={(formik.touched.email && formik.errors.email) }
         />
-        {/* {error} */}
         <StyledTextField
           fullWidth
           id="password"
@@ -145,7 +149,7 @@ export default function Login() {
 
         <Box sx={{ justifyContent: "center", display: "flex" }}>
           <StyledButton variant="contained" type="submit">
-            Login
+           {alert?(<Loading/>):(<>Login</>)} 
           </StyledButton>
         </Box>
       </Box>

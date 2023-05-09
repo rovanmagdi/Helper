@@ -80,6 +80,11 @@ export default class Carousal extends Component {
                       marginRight: "auto",
                     }}
                   />
+
+
+
+
+                  
                   {img === plumberImg && (
                     <StyledTypographyCarsoual>plumber</StyledTypographyCarsoual>
                   )}

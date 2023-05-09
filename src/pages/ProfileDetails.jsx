@@ -269,6 +269,7 @@ export const ProfileDetails = () => {
 
           {user ? (
             <>
+            
               <FormDialog
                 title={<StyledButton sx={{ mt: 3 }}>Order Now</StyledButton>}
               />
@@ -335,13 +336,14 @@ export const ProfileDetails = () => {
                         </Grid>
                       );
                     })}
-                      {details.type == "user" ?(<> <FormDialogFeedback
+                      {user.type == "user" ?(<> <FormDialogFeedback
                       title={
                         <Box
                           sx={{
                             position: "absolute",
                             bottom: 0,
                             right: 0,
+                            p:5
                           }}
                         >
                           <StyledButton>Add Comment</StyledButton>

@@ -329,7 +329,7 @@ export const ProfileUser = () => {
                             />
                         </Grid>
                     </Grid>
-                    <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+                    {/* <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
                         <Typography
                             sx={{
                                 fontWeight: "bold",
@@ -341,20 +341,9 @@ export const ProfileUser = () => {
                             Persoanl
                         </Typography>
                         <Divider sx={{ width: "60%" }} />
-                    </Box>
-                    <Grid container spacing={2} sx={{ mt: 1, fontWeight: "bold" }}>
-                        <Grid item xs={2}>
-                            Gender
-                        </Grid>
-                        <Grid
-                            item
-                            xs={10}
-                            sx={{ color: `${theme.palette.primary.main}` }}
-                        >
-                            Male
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={2} sx={{ mt: 1, fontWeight: "bold" }}>
+                    </Box> */}
+                   
+                    {/* <Grid container spacing={2} sx={{ mt: 1, fontWeight: "bold" }}>
                         <Grid item xs={2}>
                             Birth Date
                         </Grid>
@@ -375,7 +364,7 @@ export const ProfileUser = () => {
                                 Edit
                             </StyledButton>
                         )}
-                    </Grid>
+                    </Grid> */}
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <OrderHistory />

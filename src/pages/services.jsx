@@ -16,6 +16,7 @@ import Tabs from "@mui/material/Tabs";
 import Empty from "../assets/empty-cart.svg";
 import Api from "../Api/Api";
 import { useNavigate } from "react-router";
+import { Loading } from "../components/Loading";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -48,6 +49,7 @@ function Services() {
   const [specialities, setSpecialities] = useState([]);
   const [services, setServices] = useState([]);
   const [value, setValue] = React.useState(0);
+  const [loading, setLoading] = React.useState(true);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -67,7 +69,7 @@ function Services() {
     })
       .then((response) => {
         console.log(response.data.specialists);
-
+        setLoading(false)
         setServices(response.data.specialists);
       })
       .catch((e) => {
@@ -89,6 +91,7 @@ function Services() {
 
   const handleClick = (e) => {
     let serviceType = services.filter((a) => a.speciality.name == e);
+
 
     setServiceTab(serviceType);
 
@@ -151,11 +154,8 @@ function Services() {
             </Box>
 
             <Grid container spacing={2}>
-              {serviceTab.length == 0 && services.length >= 1 ? (
-                <>
-                  {console.log("1=>", services.length)}
-                  {console.log("2=>", serviceTab.length)}
-                  {console.log(serviceTab.length == 0 && services.length >= 1)}
+            {!loading?(<>
+                 
                   {services?.map((res, index) => {
                     return (
                       <Grid item xs={4} key={index}>
@@ -173,22 +173,16 @@ function Services() {
                       </Grid>
                     );
                   })}
-                </>
-              ) : (
-                <>
-                  <Box
-                    component="img"
-                    src={Empty}
-                    sx={{ width: "400px", margin: "auto" }}
-                  />
-                </>
-              )}
+                </>):(<><Loading/></>)}
+                
+             
             </Grid>
             <Stack direction="row">
-              {/* {services.length >= 1 && serviceTab.length >= 1 ? ( */}
-                <>
+              {/* { serviceTab.length<=1 && services.length>=1 ? ( */}
+                 <> 
                   {console.log("3=>", services.length)}
-                  {console.log("4=>", serviceTab.length)}{console.log(services.length >= 1 && serviceTab.length >= 1)
+                  {console.log("4=>", serviceTab.length)}
+                  {console.log(services.length >= 1 && serviceTab.length >= 1)
                   }
 
                   {serviceTab?.map((res, index) => {
@@ -204,8 +198,9 @@ function Services() {
                         />
                       </TabPanel>
                     );
-                  })}
-                </>
+                  })}</>
+                {/* ):(<><Box component="img" src={Empty}/></>)} */
+                }
               
             </Stack>
           </Box>

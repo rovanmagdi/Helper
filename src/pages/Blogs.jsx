@@ -1,23 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Divider, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 import blogImg from "../assets/blog.png";
-import { StyledButton } from "../styled/Button";
-import Api from "../Api/Api";
-export const Blogs = () => {
-  const [blog, setBlog] = useState([])
-  useEffect(() => {
 
-    Api
-      .get(
-        "/blogs"
-      )
+import Api from "../Api/Api";
+import { Loading } from "../components/Loading";
+import Empty from "../assets/empty-cart.svg";
+
+export const Blogs = () => {
+  const [blog, setBlog] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    Api.get("/blogs")
       .then((response) => {
         setBlog(response.data);
+        setLoading(true);
       })
       .catch((e) => {
         console.log(e.response.data.message);
       });
-  }, [])
+  }, []);
   return (
     <Container
       sx={{
@@ -29,7 +38,7 @@ export const Blogs = () => {
       <Stack sx={{ textAlign: "center", gap: 8 }}>
         <Box
           component="img"
-          src={`https://helpers.amr-eissa.tech/public/${blogImg}`}
+          src={`${blogImg}`}
           sx={{ width: "16%", position: "absolute" }}
         ></Box>
         <Typography variant="h4" sx={{ fontWeight: "bold" }}>
@@ -41,40 +50,54 @@ export const Blogs = () => {
         </Typography>
       </Stack>
       <Divider sx={{ pt: 8 }} />
-      {blog.map((blog) => {
-        return (
-          <Stack
-            direction="row"
-            sx={{
-              m: 2,
-              alignItems: "center",
-              border: "1px solid lightgray",
-              boxShadow: "5px 5px 4px -1px rgba(230,230,230,0.69)",
-              p: 2,
-              borderRadius: "10px",
-            }}
-          >
+      {loading ? (
+        <>
+        {blog.length>0?(<>{blog.map((blog) => {
+            return (
+              <Grid
+                key={blog.id}
+                container
+                spacing={2}
+                sx={{
+                  mb: 4,
+                  mt: 3,
+                  alignItems: "center",
+                  border: "1px solid lightgray",
+                  boxShadow: "5px 5px 4px -1px rgba(230,230,230,0.69)",
+                  // p: 2,
+                  borderRadius: "10px",
+                }}
+              >
+                <Grid item xs={4}>
+                  <Box
+                    component="img"
+                    src={`https://helpers.amr-eissa.tech/public/${blog.image_path}`}
+                    sx={{ width: "100%", height: "auto" }}
+                  />
+                </Grid>
 
-            <Box sx={{width:"200px"}}>
-              <Box
-                component="img"
-                src={blog.img}
-                sx={{ width: "80%" }}
-              />
-            </Box>
-
-
-            <Box>
-              <Typography component="h2" sx={{ fontWeight: "bold" }}>
-                {blog.title}
-              </Typography>
-              <Typography dangerouslySetInnerHTML={{ __html: blog.description }} />
-
-            </Box>
-          </Stack>
-
-        )
-      })}
+                <Grid item xs={8}>
+                  <Typography sx={{ fontWeight: "bold", padding: "1px" }}>
+                    {blog.title}
+                  </Typography>
+                  <Typography
+                    dangerouslySetInnerHTML={{ __html: blog.description }}
+                  />
+                </Grid>
+              </Grid>
+            );
+          })}
+        </>
+      ) : (
+        <>
+          <Box
+        component="img"
+        src={Empty}
+        sx={{ width: "50%", margin: "auto", p: 5 }}
+      />
+        </>
+      )}</>):(<><Loading /> </>)}
+          
     </Container>
   );
 };
