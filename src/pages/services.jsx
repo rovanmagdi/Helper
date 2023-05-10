@@ -12,6 +12,7 @@ import aboutImg from "../assets/services.png";
 import ServicesCard from "../components/Card";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
+import Empty from "../assets/empty-cart.svg";
 
 import Api from "../Api/Api";
 import { useNavigate } from "react-router";
@@ -49,6 +50,7 @@ function Services() {
   const [services, setServices] = useState([]);
   const [value, setValue] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
+  const [empty, setEmpty] = React.useState(true);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -93,7 +95,7 @@ function Services() {
 
 
     setServiceTab(serviceType);
-
+  
 
   };
   const nagivate = useNavigate();
@@ -176,8 +178,8 @@ function Services() {
                 
              
             </Grid>
-            <Stack direction="row">
-              {/* { serviceTab.length<=1 && services.length>=1 ? ( */}
+            <Stack direction="row" sx={{mt:6}}>
+              { empty ? (
                  <> 
                  
                   {serviceTab?.map((res, index) => {
@@ -194,8 +196,8 @@ function Services() {
                       </TabPanel>
                     );
                   })}</>
-                {/* ):(<><Box component="img" src={Empty}/></>)} */
-                }
+                 ):(<><Box component="img" src={Empty}/></>)} 
+                
               
             </Stack>
           </Box>
