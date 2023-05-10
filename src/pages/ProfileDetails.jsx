@@ -24,6 +24,7 @@ import HomeRepairServiceOutlinedIcon from "@mui/icons-material/HomeRepairService
 import {
   FormDialog,
   FormDialogError,
+  FormDialogErrorUser,
   FormDialogFeedback,
 } from "../components/Pop";
 import { useNavigate, useParams } from "react-router";
@@ -267,7 +268,7 @@ export const ProfileDetails = () => {
             </Box>
           </>
 
-          {user ? (
+          {user.type==="user" ? (
             <>
             
               <FormDialog
@@ -276,7 +277,7 @@ export const ProfileDetails = () => {
             </>
           ) : (
             <>
-              <FormDialogError
+              <FormDialogErrorUser
                 title={<StyledButton sx={{ mt: 3 }}>Order Now</StyledButton>}
               />
             </>

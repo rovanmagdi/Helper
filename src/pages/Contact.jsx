@@ -37,7 +37,7 @@ export const Contact = () => {
       }
     )
       .then((response) => {
-        console.log(response.data.message);
+        
         setError("");
         setSucces(true)
         setTimeout(() => {
@@ -45,7 +45,7 @@ export const Contact = () => {
         }, 3000);
       })
       .catch((e) => {
-        console.log(e.response);
+      
         setError(e.response);
       });
   };

@@ -1,6 +1,5 @@
 import {
   Box,
-  Checkbox,
   Container,
   Divider,
   Grid,
@@ -10,10 +9,10 @@ import {
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import aboutImg from "../assets/services.png";
-import ServicesCard, { ImgMediaCard } from "../components/Card";
+import ServicesCard from "../components/Card";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import Empty from "../assets/empty-cart.svg";
+
 import Api from "../Api/Api";
 import { useNavigate } from "react-router";
 import { Loading } from "../components/Loading";
@@ -53,7 +52,7 @@ function Services() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    // console.log(newValue);
+ 
   };
 
   function a11yProps(index) {
@@ -68,21 +67,21 @@ function Services() {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => {
-        console.log(response.data.specialists);
+        
         setLoading(false)
         setServices(response.data.specialists);
       })
       .catch((e) => {
-        console.log(e.response.data.message);
+      
       });
 
     Api.get("/specialities")
       .then((response) => {
-        console.log(response.data);
+       
         setSpecialities(response.data);
       })
       .catch((e) => {
-        console.log(e.response.data.message);
+        
         // ErrorFun(e.response.data.message);
       });
   }, [token]);
@@ -90,16 +89,16 @@ function Services() {
   const [serviceTab, setServiceTab] = useState([]);
 
   const handleClick = (e) => {
-    let serviceType = services.filter((a) => a.speciality.name == e);
+    let serviceType = services.filter((a) => a.speciality.name === e);
 
 
     setServiceTab(serviceType);
 
-    // console.log(serviceType);
+
   };
   const nagivate = useNavigate();
   const handleRoute = (id) => {
-    // console.log(id);
+  
 
     nagivate(`/Profile_details/${id}`);
   };
@@ -180,11 +179,7 @@ function Services() {
             <Stack direction="row">
               {/* { serviceTab.length<=1 && services.length>=1 ? ( */}
                  <> 
-                  {console.log("3=>", services.length)}
-                  {console.log("4=>", serviceTab.length)}
-                  {console.log(services.length >= 1 && serviceTab.length >= 1)
-                  }
-
+                 
                   {serviceTab?.map((res, index) => {
                     return (
                       <TabPanel value={value} index={value} key={index}>

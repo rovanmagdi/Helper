@@ -87,7 +87,7 @@ const Footer = () => {
                             }}
                         >
                             <EmailOutlinedIcon sx={{ fontSize: "20px" }} />{" "}
-                            <Typography sx={{ px: 1, fontSize: "0.8rem", }}>info@fanni-sd.com</Typography>
+                            <Typography sx={{ px: 1, fontSize: "0.8rem", }}>helperz@helperz-sd.com</Typography>
                         </Stack>
                     </Grid>
                     <Grid item xs={12} lg={3} md={4}>

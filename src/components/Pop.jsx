@@ -311,3 +311,48 @@ export function FormDialogFeedback({ title }) {
     </div>
   );
 }
+
+export function FormDialogErrorUser({ title }) {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const nagivate = useNavigate();
+  const handleClose = () => {
+    setOpen(false);
+    nagivate("/Sign_up");
+  };
+
+  return (
+    <div>
+      <Typography variant="outlined" onClick={handleClickOpen}>
+        {title}
+      </Typography>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        sx={{ width: "100%", textAlign: "center" }}
+      >
+        <DialogContent>
+          <DialogContentText>
+            <WarningIcon sx={{ m: 8, fontSize: "7rem", color: "#FE445B" }} />
+            <Typography sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+              You must Sign Up first as User!
+            </Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <StyledButton onClick={handleClose}>Login</StyledButton>
+          <Button
+            onClick={() => setOpen(false)}
+            sx={{ color: "red", border: "1px solid red", m: 3 }}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}

@@ -24,7 +24,7 @@ export const Blogs = () => {
         setLoading(true);
       })
       .catch((e) => {
-        console.log(e.response.data.message);
+   
       });
   }, []);
   return (

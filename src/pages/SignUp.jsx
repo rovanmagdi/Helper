@@ -2,7 +2,7 @@ import { Box, Container, Stack } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { Grid, Select, TextField, Typography } from "@mui/material";
+import { Grid, Select, Typography } from "@mui/material";
 import { StyledTextField } from "../styled/TextFeild";
 import { StyledButton } from "../styled/Button";
 import Person3Icon from "@mui/icons-material/Person3";
@@ -11,7 +11,6 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Api from "../Api/Api";
-import { FormHelperText } from "@mui/joy";
 import { useNavigate } from "react-router";
 // import loginApi from "../Api/Login";
 
@@ -26,18 +25,32 @@ const validationSchema = yup.object({
     .string("Enter your email")
     .email("Enter a valid email")
     .required("Email is required"),
-  city: yup.string("Enter your Speciality").required("Speciality is required"),
+  city: yup.string("Enter your City").required("City is required"),
 
-  area: yup.string("Enter your Speciality").required("Speciality is required"),
-  // type: yup.string("Enter your type").required("type is required"),
+  area: yup.string("Enter your Area").required("Area is required"),
 
-  price: yup
-  .string("Enter your Speciality"),
-  // .required("Speciality is required"),
+  type: yup.string("Enter your type").required("Type is required"),
+  price: yup.string("Enter your Speciality").when("type", {
+    is: (val) => {
+      if (val === "specialist") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    then: (schema) => schema.required(""),
+  }),
 
-  speciality: yup
-    .string("Enter your Speciality"),
-    
+  speciality: yup.string().when("type", {
+    is: (val) => {
+      if (val === "specialist") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    then: (schema) => schema.required("Speciality is required"),
+  }),
   password: yup
     .string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length")
@@ -58,43 +71,30 @@ export default function Login() {
   const [specialities, setSpecialities] = useState([]);
   const [cities, setCities] = React.useState([]);
   const [areas, setAreas] = React.useState([]);
- 
+
   const [selectedtype, setSelectedType] = React.useState("");
   const nagivate = useNavigate();
   useEffect(() => {
     Api.get("/cities")
       .then((response) => {
-        // console.log(response.data);
         setCities(response.data);
       })
-      .catch((e) => {
-        // console.log(e.response.data.message);
-        // ErrorFun(e.response.data.message);
-      });
+      .catch((e) => {});
 
     Api.get("/specialities")
       .then((response) => {
-        // console.log(response.data);
         setSpecialities(response.data);
       })
-      .catch((e) => {
-        console.log(e.response.data.message);
-        // ErrorFun(e.response.data.message);
-      });
+      .catch((e) => {});
   }, []);
 
   const handleChange = (event) => {
-    // console.log(event.target);
     setSelectedCity(event.target.value);
     Api.get("/areas")
       .then((response) => {
-        // console.log(response.data);
         setAreas(response.data);
       })
-      .catch((e) => {
-        console.log(e.response.data.message);
-        // ErrorFun(e.response.data.message);
-      });
+      .catch((e) => {});
   };
 
   function ErrorFun(e) {
@@ -107,7 +107,7 @@ export default function Login() {
       phone: "",
       city: "",
       area: "",
-      price:"",
+      price: "",
       speciality: "",
       type: "",
       confirm_password: "",
@@ -116,8 +116,6 @@ export default function Login() {
     validationSchema: validationSchema,
 
     onSubmit: (values) => {
-      console.log(values);
-
       Api.post("/register", {
         name: values.name,
         phone: values.phone,
@@ -130,11 +128,6 @@ export default function Login() {
         speciality_id: selectedSpeciality,
       })
         .then((response) => {
-          console.log(response.data);
-
-          console.log(response.data.user);
-          localStorage.setItem("user",JSON.stringify(response.data));
-
           nagivate("/Log_in");
         })
         .catch((e) => {
@@ -146,7 +139,6 @@ export default function Login() {
   const handleLogin = () => {
     nagivate("/Log_in");
   };
- 
 
   return (
     <Container
@@ -260,7 +252,6 @@ export default function Login() {
                 }}
                 name="city"
                 error={formik.touched.city && Boolean(formik.errors.city)}
-                // helperText={formik.touched.city && formik.errors.city}
               >
                 {cities.map((a) => {
                   return (
@@ -270,6 +261,17 @@ export default function Login() {
                   );
                 })}
               </Select>
+              <Box
+                sx={{
+                  backgroundColor: "white",
+                  fontWeight: 300,
+                  px: 2,
+                  color: "#d32f2f",
+                }}
+              >
+                {formik.touched.city && formik.errors.city}
+                {error.city}
+              </Box>
             </FormControl>
           </Grid>
           <Grid item xs={6}>
@@ -282,14 +284,9 @@ export default function Login() {
                 label="Area"
                 name="area"
                 error={formik.touched.area && Boolean(formik.errors.area)}
-                // helperText={
-                //   formik.touched.area &&
-                //   formik.errors.area
-                // }
                 onChange={(event) => {
                   formik.handleChange(event);
                   setSelectedArea(event.target.value);
-                  console.log(event);
                 }}
               >
                 {areas.map((a, id) => {
@@ -300,6 +297,17 @@ export default function Login() {
                   );
                 })}
               </Select>
+              <Box
+                sx={{
+                  backgroundColor: "white",
+                  fontWeight: 300,
+                  px: 2,
+                  color: "#d32f2f",
+                }}
+              >
+                {formik.touched.area && formik.errors.area}
+                {error.area}
+              </Box>
             </FormControl>
           </Grid>
         </Grid>
@@ -315,22 +323,29 @@ export default function Login() {
             onChange={(event) => {
               formik.handleChange(event);
               setSelectedType(event.target.value);
-              console.log(event);
             }}
             error={formik.touched.type && Boolean(formik.errors.type)}
           >
             {/* {types.map((a) => {
               return ( */}
-                <MenuItem value="user">
-                 user
-                </MenuItem>
-                <MenuItem value="specialist">
-                specialist
-                </MenuItem>
-              {/* );
+            <MenuItem value="user">user</MenuItem>
+            <MenuItem value="specialist">specialist</MenuItem>
+            {/* );
             })} */}
           </Select>
+          <Box
+            sx={{
+              backgroundColor: "white",
+              fontWeight: 300,
+              px: 2,
+              color: "#d32f2f",
+            }}
+          >
+            {formik.touched.type && formik.errors.type}
+            {error.type}
+          </Box>
         </FormControl>
+
         {selectedtype === "specialist" ? (
           <>
             <FormControl fullWidth sx={{ mb: 4, backgroundColor: "#f0f0f0" }}>
@@ -344,7 +359,6 @@ export default function Login() {
                 onChange={(event) => {
                   formik.handleChange(event);
                   setSelectedSpeciality(event.target.value);
-                  console.log(event);
                 }}
                 error={
                   formik.touched.speciality && Boolean(formik.errors.speciality)
@@ -358,6 +372,17 @@ export default function Login() {
                   );
                 })}
               </Select>
+              <Box
+                sx={{
+                  backgroundColor: "white",
+                  fontWeight: 300,
+                  px: 2,
+                  color: "#d32f2f",
+                }}
+              >
+                {formik.touched.speciality && formik.errors.speciality}
+                {error.speciality}
+              </Box>
             </FormControl>
             <StyledTextField
               fullWidth

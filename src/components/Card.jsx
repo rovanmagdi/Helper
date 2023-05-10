@@ -93,7 +93,7 @@ export default function ServicesCard({ title, area, city, job, imgJob,rate,click
               </Typography>
             </Typography>
             
-            <Rating name="half-rating" defaultValue={rate} precision={0.5} />
+         
           </Typography>
       </CardContent>
     

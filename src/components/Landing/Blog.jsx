@@ -3,10 +3,12 @@ import { ImgMediaCard } from "../Card";
 import { Container, Grid } from "@mui/material";
 import { StyledTypographyTitle } from "../../styled/Typography";
 import Api from "../../Api/Api";
+import { Loading } from "../Loading";
 
 const BlogLanding = () => {
 
   const [blog, setBlog] = useState([])
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
 
     Api
@@ -15,9 +17,10 @@ const BlogLanding = () => {
       )
       .then((response) => {
         setBlog(response.data);
+        setLoading(false)
       })
       .catch((e) => {
-        console.log(e.response.data.message);
+        
       });
   }, [])
   return (
@@ -25,6 +28,7 @@ const BlogLanding = () => {
       <StyledTypographyTitle variant="h5" sx={{ m: 5 }}>
         Blogs
       </StyledTypographyTitle>
+      {!loading?(<>
       <Grid container spacing={3}>
         {blog.slice(0,2)?.map((e)=>{
           return(
@@ -35,6 +39,8 @@ const BlogLanding = () => {
           )
         })}
       </Grid>
+      </>):(<><Loading/></>)}
+      
     </Container>
   );
 };

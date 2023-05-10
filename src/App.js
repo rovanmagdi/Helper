@@ -15,19 +15,9 @@ import SignUp from "./pages/SignUp";
 import { ProfileDetails } from "./pages/ProfileDetails";
 import { ProfileUser } from "./pages/ProfileUser";
 import { Should } from "./pages/Should";
-import { useEffect, useRef, useState } from "react";
 
 function App() {
-  // const [token,setToken]=useState()
-  const token = (localStorage.getItem("user"));
-  // useEffect(()=>{
-
-    // setToken(localStorage.getItem("user"));
-    // const [rerender, setRerender] = useState(false);
-
-   
-    // setRerender(!rerender); 
-  // })
+ 
 
   return (
     <ThemeProvider theme={theme}>
@@ -38,8 +28,8 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/Home" element={<Landing />} />
           <Route path="/About_US" element={<About />} />
-          { token?( <Route path="/Services" element={<Services />} />):
-          (<Route path="/Services" element={<Should />} />)}
+        <Route path="/Services" element={<Services />} />
+          <Route path="/Should" element={<Should />} />
          
           <Route path="/Blogs" element={<Blogs />} />
           <Route path="/Contact_Us" element={<Contact />} />

@@ -3,9 +3,8 @@ import React from 'react'
 
 export const Loading = () => {
   return (
-    <Box sx={{margin:"auto",maxWidth:"80%",p:5}}>
+    <Box sx={{margin:"auto",maxWidth:"10%",p:5}}>
         <Box>
-
         <CircularProgress/>
         </Box>
         </Box>

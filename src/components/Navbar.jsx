@@ -29,11 +29,17 @@ function Navbar() {
   const handleClick = (link) => {
     nagivate(`/${link}`);
     setActive(link);
+    if (link === 'Services') {
+      if (user) {
+        nagivate(`/${link}`);
+      } else {
+          nagivate('/Should')
+      }
+    }
   };
 
   const handleLogin = () => {
     nagivate("/Log_in");
-    console.log("done");
   };
 
   const [open, setOpen] = React.useState(false);
@@ -52,7 +58,7 @@ function Navbar() {
   };
 
   const handleProfile = () => {
-   nagivate('/Profile_user')
+    nagivate('/Profile_user')
   };
 
   function handleListKeyDown(event) {
@@ -75,8 +81,7 @@ function Navbar() {
   }, [open]);
 
 
-  const handleLogOut=()=>
-  {
+  const handleLogOut = () => {
     localStorage.clear();
     nagivate('/')
   }
@@ -120,11 +125,10 @@ function Navbar() {
                     ml: 2,
                     display: "block",
                     fontWeight: "bold",
-                    color: `${
-                      active === page
+                    color: `${active === page
                         ? `${theme.palette.primary.main}`
                         : "black"
-                    } `,
+                      } `,
                     "&:hover": {
                       cursor: "pointer",
                     },
@@ -143,7 +147,7 @@ function Navbar() {
                 <Box
                   component="img"
                   src={ImgMan}
-                  sx={{ width: "40px",pl:3}}
+                  sx={{ width: "40px", pl: 3 }}
                 />
 
                 <div>
@@ -192,7 +196,7 @@ function Navbar() {
                               aria-labelledby="composition-button"
                               onKeyDown={handleListKeyDown}
                             >
-                              <MenuItem onClick={(event)=>{handleClose(event);handleProfile()}}>Profile</MenuItem>
+                              <MenuItem onClick={(event) => { handleClose(event); handleProfile() }}>Profile</MenuItem>
                               <MenuItem onClick={handleLogOut}>Logout</MenuItem>
                             </MenuList>
                           </ClickAwayListener>
@@ -273,7 +277,69 @@ function Navbar() {
               </Typography>
             ))}
             {user ? (
-              <>iuh</>
+              <>   <>
+                <Box
+                  component="img"
+                  src={ImgMan}
+                  sx={{ width: "40px", pl: 3 }}
+                />
+
+                <div>
+                  <Button
+                    ref={anchorRef}
+                    id="composition-button"
+                    aria-controls={open ? "composition-menu" : undefined}
+                    aria-expanded={open ? "true" : undefined}
+                    aria-haspopup="true"
+                    onClick={handleToggle}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        textTransform: "capitalize",
+                        fontSize: "15px",
+                        color: `${theme.palette.primary.main}`,
+                      }}
+                    >
+                      {user.user.name}
+                    </Typography>
+                  </Button>
+                  <Popper
+                    open={open}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    placement="bottom-start"
+                    transition
+                    disablePortal
+                  >
+                    {({ TransitionProps, placement }) => (
+                      <Grow
+                        {...TransitionProps}
+                        style={{
+                          transformOrigin:
+                            placement === "bottom-start"
+                              ? "left top"
+                              : "left bottom",
+                        }}
+                      >
+                        <Paper>
+                          <ClickAwayListener onClickAway={handleClose}>
+                            <MenuList
+                              autoFocusItem={open}
+                              id="composition-menu"
+                              aria-labelledby="composition-button"
+                              onKeyDown={handleListKeyDown}
+                            >
+                              <MenuItem onClick={(event) => { handleClose(event); handleProfile() }}>Profile</MenuItem>
+                              <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                            </MenuList>
+                          </ClickAwayListener>
+                        </Paper>
+                      </Grow>
+                    )}
+                  </Popper>
+                </div>
+              </></>
             ) : (
               <StyledButton onClick={handleLogin}>Login</StyledButton>
             )}

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Slider from "react-slick";
 import { Box, Container } from "@mui/material";
 import plumberImg from "../../assets/Plumber.png";
 import light from "../../assets/light-bulb.png";
 import air from "../../assets/air-conditioner.png";
 import electronics from "../../assets/electronics.png";
+import Slider from "react-slick";
 import { StyledTypographyCarsoual } from "../../styled/Typography";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
